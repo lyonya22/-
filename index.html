@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Саша, с днём рождения 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --pink:#f2a7c3;
+  --pink-light:#fde8f0;
+  --rose:#e8728a;
+  --lilac:#c9b8e8;
+  --lilac-dark:#9b87c9;
+  --cream:#fdf8f5;
+  --dark:#1a1218;
+  --mid:#6b5b6e;
+}
+body{background:var(--cream);color:var(--dark);font-family:'Inter',sans-serif;font-weight:300;overflow-x:hidden}
+#canvas{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.55}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;padding:40px 24px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(242,167,195,0.25) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 90%,rgba(201,184,232,0.3) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 50% 50%,rgba(253,232,240,0.4) 0%,transparent 70%);z-index:0}
+.hero-content{position:relative;z-index:2}
+.age-badge{display:inline-block;font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;letter-spacing:4px;color:var(--rose);border:1px solid rgba(232,114,138,0.35);padding:8px 24px;border-radius:99px;margin-bottom:36px;animation:fadeDown 1s ease both}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(64px,14vw,130px);font-weight:300;line-height:0.9;letter-spacing:-2px;animation:fadeDown 1s 0.2s ease both}
+.hero-title .name{display:block;background:linear-gradient(135deg,var(--rose),var(--lilac-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-style:italic}
+.hero-title .happy{display:block;font-size:0.35em;letter-spacing:8px;text-transform:uppercase;-webkit-text-fill-color:var(--mid);font-style:normal;font-weight:300;margin-bottom:12px}
+.hero-title .bday{display:block;font-size:0.32em;letter-spacing:6px;text-transform:uppercase;-webkit-text-fill-color:var(--mid);font-style:normal;font-weight:300;margin-top:14px}
+.hero-num{font-family:'Cormorant Garamond',serif;font-size:clamp(100px,22vw,220px);font-weight:300;line-height:0.85;background:linear-gradient(135deg,rgba(242,167,195,0.18),rgba(201,184,232,0.22));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:absolute;bottom:-20px;right:-10px;z-index:1;pointer-events:none;animation:fadeUp 1.2s 0.5s ease both}
+.scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--mid);opacity:0.6;z-index:2;animation:fadeUp 1s 1.5s ease both}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--rose),transparent);animation:scrollAnim 2s ease-in-out infinite}
+@keyframes scrollAnim{0%,100%{transform:scaleY(1);opacity:0.5}50%{transform:scaleY(1.3);opacity:1}}
+
+/* SECTIONS */
+section{position:relative;z-index:2;padding:100px 24px;max-width:860px;margin:0 auto}
+
+/* REASONS */
+.reasons-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,6vw,64px);font-weight:300;font-style:italic;text-align:center;margin-bottom:16px;line-height:1.1}
+.reasons-sub{text-align:center;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--rose);margin-bottom:64px}
+.reasons-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.reason-card{background:white;border:1px solid rgba(242,167,195,0.2);border-radius:20px;padding:36px 28px;transition:transform 0.4s cubic-bezier(0.16,1,0.3,1),box-shadow 0.4s;cursor:default}
+.reason-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(232,114,138,0.12)}
+.reason-card:nth-child(1){grid-column:1/3}
+.reason-num{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:rgba(232,114,138,0.2);line-height:1;margin-bottom:12px}
+.reason-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;line-height:1.5;color:var(--dark)}
+.reason-card:nth-child(1) .reason-text{font-size:28px}
+
+/* TIMELINE */
+.timeline-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,6vw,64px);font-weight:300;font-style:italic;text-align:center;margin-bottom:16px}
+.timeline-sub{text-align:center;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--lilac-dark);margin-bottom:64px}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:grid;grid-template-columns:80px 1px 1fr;gap:0 24px;align-items:start;padding-bottom:48px;position:relative}
+.tl-year{font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:2px;color:var(--rose);text-align:right;padding-top:4px}
+.tl-line{background:linear-gradient(to bottom,var(--pink),var(--lilac));width:1px;align-self:stretch;position:relative}
+.tl-line::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--rose);position:absolute;top:6px;left:-3.5px}
+.tl-heading{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;margin-bottom:6px}
+.tl-desc{font-size:14px;line-height:1.8;color:var(--mid)}
+
+/* ===== GALLERY ===== */
+.gallery-section{position:relative;z-index:2;padding:100px 24px;max-width:1100px;margin:0 auto}
+.gallery-label{text-align:center;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--rose);margin-bottom:16px}
+.gallery-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,6vw,64px);font-weight:300;font-style:italic;text-align:center;margin-bottom:12px;line-height:1.1}
+.gallery-sub{text-align:center;font-size:14px;color:var(--mid);margin-bottom:48px;line-height:1.7}
+
+/* Drop zone */
+.drop-zone{
+  border:1.5px dashed rgba(232,114,138,0.35);
+  border-radius:24px;
+  padding:48px 24px;
+  text-align:center;
+  background:rgba(253,232,240,0.3);
+  cursor:pointer;
+  transition:all 0.3s;
+  margin-bottom:40px;
+  position:relative;
+}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--rose);background:rgba(253,232,240,0.6)}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-icon{font-size:40px;margin-bottom:12px}
+.drop-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--dark);margin-bottom:6px}
+.drop-hint{font-size:13px;color:var(--mid);letter-spacing:1px}
+.drop-btn{
+  display:inline-block;
+  margin-top:16px;
+  background:linear-gradient(135deg,var(--rose),var(--lilac-dark));
+  color:white;
+  border:none;
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;
+  font-style:italic;
+  letter-spacing:1px;
+  padding:12px 32px;
+  border-radius:99px;
+  cursor:pointer;
+  transition:transform 0.3s,box-shadow 0.3s;
+  pointer-events:none;
+}
+.drop-zone:hover .drop-btn{transform:scale(1.03);box-shadow:0 8px 30px rgba(232,114,138,0.3)}
+
+/* Masonry grid */
+.photo-grid{
+  columns:3;
+  column-gap:16px;
+}
+.photo-card{
+  break-inside:avoid;
+  margin-bottom:16px;
+  border-radius:20px;
+  overflow:hidden;
+  position:relative;
+  cursor:pointer;
+  background:white;
+  border:1px solid rgba(242,167,195,0.2);
+  transition:transform 0.4s cubic-bezier(0.16,1,0.3,1),box-shadow 0.4s;
+}
+.photo-card:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 24px 60px rgba(232,114,138,0.18)}
+.photo-card img{width:100%;display:block;object-fit:cover}
+.photo-card .caption-overlay{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  background:linear-gradient(to top,rgba(26,18,24,0.7),transparent);
+  padding:28px 16px 16px;
+  opacity:0;
+  transition:opacity 0.3s;
+}
+.photo-card:hover .caption-overlay{opacity:1}
+.caption-text{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:15px;
+  color:white;
+}
+.photo-card .remove-btn{
+  position:absolute;
+  top:10px;right:10px;
+  width:28px;height:28px;
+  background:rgba(255,255,255,0.9);
+  border:none;
+  border-radius:50%;
+  font-size:14px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;
+  transition:opacity 0.2s;
+  color:var(--rose);
+}
+.photo-card:hover .remove-btn{opacity:1}
+
+/* empty state inside grid */
+.empty-grid{
+  text-align:center;
+  padding:48px;
+  color:var(--mid);
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;
+  font-style:italic;
+  opacity:0.6;
+}
+
+/* Lightbox */
+.lightbox{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(26,18,24,0.92);
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  padding:24px;
+}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:80vh;border-radius:16px;object-fit:contain}
+.lightbox-close{position:absolute;top:20px;right:28px;background:none;border:none;color:white;font-size:32px;cursor:pointer;opacity:0.7;transition:opacity 0.2s}
+.lightbox-close:hover{opacity:1}
+.lightbox-nav{display:flex;gap:24px;margin-top:20px}
+.lb-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;transition:all 0.2s}
+.lb-btn:hover{background:rgba(255,255,255,0.2)}
+
+/* Caption input */
+.caption-input-wrap{margin-top:8px;padding:0 4px}
+.caption-input{
+  width:100%;
+  border:none;
+  border-bottom:1px solid rgba(232,114,138,0.25);
+  background:transparent;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:14px;
+  color:var(--mid);
+  padding:6px 0;
+  outline:none;
+  transition:border-color 0.3s;
+}
+.caption-input::placeholder{color:rgba(107,91,110,0.4)}
+.caption-input:focus{border-color:var(--rose)}
+
+/* WISHES */
+.wishes-wrap{text-align:center}
+.wishes-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,6vw,64px);font-weight:300;font-style:italic;margin-bottom:48px}
+.wish-big{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,3.5vw,32px);font-weight:300;line-height:1.7;color:var(--dark);max-width:640px;margin:0 auto 48px}
+.wish-big em{font-style:italic;color:var(--rose)}
+
+/* FINAL */
+.final{min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:100px 24px;max-width:100%}
+.final-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(242,167,195,0.15),rgba(201,184,232,0.2));z-index:0}
+.final-content{position:relative;z-index:2}
+.final-hearts{font-size:clamp(60px,12vw,120px);margin-bottom:24px;animation:heartBeat 1.5s ease-in-out infinite}
+@keyframes heartBeat{0%,100%{transform:scale(1)}25%{transform:scale(1.08)}50%{transform:scale(1.02)}75%{transform:scale(1.06)}}
+.final-title{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,8vw,90px);font-weight:300;line-height:1;margin-bottom:24px}
+.final-title span{display:block;font-style:italic;background:linear-gradient(135deg,var(--rose),var(--lilac-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.final-sub{font-size:15px;letter-spacing:2px;color:var(--mid);text-transform:uppercase}
+.confetti-btn{margin-top:40px;background:linear-gradient(135deg,var(--rose),var(--lilac-dark));border:none;color:white;font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;letter-spacing:2px;padding:16px 48px;border-radius:99px;cursor:pointer;transition:transform 0.3s,box-shadow 0.3s}
+.confetti-btn:hover{transform:scale(1.04);box-shadow:0 12px 40px rgba(232,114,138,0.4)}
+
+@keyframes fadeDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;transform:translateY(40px);transition:opacity 0.9s ease,transform 0.9s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:700px){
+  .reasons-grid{grid-template-columns:1fr}
+  .reason-card:nth-child(1){grid-column:1}
+  .tl-item{grid-template-columns:60px 1px 1fr;gap:0 16px}
+  .photo-grid{columns:2}
+}
+@media(max-width:440px){.photo-grid{columns:1}}
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="age-badge">16 лет · особенный день</div>
+    <h1 class="hero-title">
+      <span class="happy">С днём рождения</span>
+      <span class="name">Саша</span>
+      <span class="bday">тебе исполняется 16</span>
+    </h1>
+  </div>
+  <div class="hero-num">16</div>
+  <div class="scroll-hint"><span>листай</span><div class="scroll-line"></div></div>
+</div>
+
+<!-- REASONS -->
+<section>
+  <p class="reasons-sub fade-up">почему ты особенная</p>
+  <h2 class="reasons-title fade-up">16 причин,<br>почему ты <em style="color:var(--rose)">крутая</em></h2>
+  <div class="reasons-grid">
+    <div class="reason-card fade-up"><div class="reason-num">01</div><div class="reason-text">Ты умеешь быть собой — и это самая редкая вещь на свете</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">02</div><div class="reason-text">У тебя невероятный вкус — в музыке, в стиле, в людях</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">03</div><div class="reason-text">Твоя улыбка меняет настроение вокруг</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">04</div><div class="reason-text">Ты смелее, чем кажешься сама себе</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">05</div><div class="reason-text">Ты точно знаешь, чего хочешь</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">06</div><div class="reason-text">Твоя энергия заразительна</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">07</div><div class="reason-text">Ты умеешь дружить по-настоящему</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">08</div><div class="reason-text">Ты честная — даже когда это сложно</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">09</div><div class="reason-text">Ты всегда находишь что-то интересное там, где другие не замечают</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">10</div><div class="reason-text">Ты вдохновляешь одним своим присутствием</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">11</div><div class="reason-text">Ты умеешь превращать обычные моменты в особенные</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">12</div><div class="reason-text">Твой характер сильнее любых трудностей</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">13</div><div class="reason-text">Ты добрее, чем хочешь показывать</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">14</div><div class="reason-text">У тебя впереди целая жизнь невероятных открытий</div></div>
+    <div class="reason-card fade-up"><div class="reason-num">15</div><div class="reason-text">Ты лучший человек из всех, кого я знаю</div></div>
+    <div class="reason-card fade-up" style="grid-column:1/3"><div class="reason-num" style="color:rgba(232,114,138,0.4)">16</div><div class="reason-text" style="font-size:26px">И самое главное — просто потому что ты <em style="color:var(--rose)">Саша</em>. Этого уже достаточно 🌸</div></div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section>
+  <p class="timeline-sub fade-up">твои 16 лет</p>
+  <h2 class="timeline-title fade-up">Путь до<br><em style="color:var(--lilac-dark)">сегодня</em></h2>
+  <div class="timeline">
+    <div class="tl-item fade-up"><div class="tl-year">2009</div><div class="tl-line"></div><div class="tl-content"><div class="tl-heading">Саша появилась на свет 🌟</div><div class="tl-desc">В этот день мир стал немного лучше. Просто потому что ты в нём теперь есть.</div></div></div>
+    <div class="tl-item fade-up"><div class="tl-year">2015</div><div class="tl-line"></div><div class="tl-content"><div class="tl-heading">Первый класс 📚</div><div class="tl-desc">Начало большого пути. Новые знания, новые друзья, новые открытия.</div></div></div>
+    <div class="tl-item fade-up"><div class="tl-year">2018</div><div class="tl-line"></div><div class="tl-content"><div class="tl-heading">Характер формируется ✨</div><div class="tl-desc">Именно тогда стало ясно — у этой девочки есть свой стиль, свой взгляд, своя история.</div></div></div>
+    <div class="tl-item fade-up"><div class="tl-year">2022</div><div class="tl-line"></div><div class="tl-content"><div class="tl-heading">Подростковая крутость 🎵</div><div class="tl-desc">Свой стиль, свои вкусы, своя музыка. Всё начало складываться в тебя настоящую.</div></div></div>
+    <div class="tl-item fade-up"><div class="tl-year">сегодня</div><div class="tl-line"></div><div class="tl-content"><div class="tl-heading">16 лет — и весь мир впереди 🌍</div><div class="tl-desc">Ты на пороге лучших лет своей жизни. Всё только начинается, Саш.</div></div></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<div class="gallery-section">
+  <p class="gallery-label fade-up">наши моменты</p>
+  <h2 class="gallery-title fade-up">Фото,<br>которые я <em style="color:var(--rose)">люблю</em></h2>
+  <p class="gallery-sub fade-up">Добавь до 12 фотографий — они появятся красивой мозаикой.<br>Можно перетащить файлы или нажать на зону загрузки.</p>
+
+  <div class="drop-zone fade-up" id="drop-zone">
+    <input type="file" accept="image/*" multiple id="file-input">
+    <div class="drop-icon">🌸</div>
+    <div class="drop-text">Перетащи фото сюда</div>
+    <div class="drop-hint">или нажми, чтобы выбрать · до 12 фото · JPG, PNG, WEBP</div>
+    <div class="drop-btn">Выбрать фотографии</div>
+  </div>
+
+  <div class="photo-grid" id="photo-grid">
+    <div class="empty-grid" id="empty-hint">Здесь появятся ваши фотографии 🌷</div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div class="lightbox-nav">
+    <button class="lb-btn" onclick="lbNav(-1)">‹</button>
+    <button class="lb-btn" onclick="lbNav(1)">›</button>
+  </div>
+</div>
+
+<!-- WISHES -->
+<section>
+  <div class="wishes-wrap">
+    <h2 class="wishes-title fade-up">Пожелания<br><em style="color:var(--rose)">от сердца</em></h2>
+    <p class="wish-big fade-up">Пусть этот год принесёт тебе <em>моменты</em>, которые ты будешь помнить всю жизнь. Пусть всё, о чём ты мечтаешь — <em>сбывается</em>. Пусть рядом будут только те, кто тебя <em>понимает</em>.</p>
+    <p class="wish-big fade-up" style="font-size:clamp(16px,2.5vw,22px);opacity:0.75">16 — это возраст, когда начинается настоящее. Держись за свою мечту, не теряй себя, улыбайся чаще. Ты заслуживаешь всего самого лучшего.</p>
+  </div>
+</section>
+
+<!-- FINAL -->
+<div class="final">
+  <div class="final-bg"></div>
+  <div class="final-content">
+    <div class="final-hearts">🌸</div>
+    <h2 class="final-title">Счастливого<br><span>дня рождения,</span>Саша</h2>
+    <p class="final-sub">с любовью · всегда твой</p>
+    <button class="confetti-btn" onclick="launchConfetti()">Нажми для сюрприза ✨</button>
+  </div>
+</div>
+
+<script>
+// ---- CANVAS PARTICLES ----
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+resize(); window.addEventListener('resize',resize);
+const EMOJIS=['🌸','✨','💫','🌷','💕','⭐','🎀'];
+class Particle{
+  constructor(){this.reset(true)}
+  reset(init=false){this.x=Math.random()*W;this.y=init?Math.random()*H:H+30;this.emoji=EMOJIS[Math.floor(Math.random()*EMOJIS.length)];this.size=12+Math.random()*16;this.speed=0.3+Math.random()*0.6;this.drift=(Math.random()-0.5)*0.4;this.opacity=0.4+Math.random()*0.5;this.rot=Math.random()*Math.PI*2;this.rotSpeed=(Math.random()-0.5)*0.02}
+  update(){this.y-=this.speed;this.x+=this.drift;this.rot+=this.rotSpeed;if(this.y<-40)this.reset()}
+  draw(){ctx.save();ctx.globalAlpha=this.opacity;ctx.translate(this.x,this.y);ctx.rotate(this.rot);ctx.font=this.size+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(this.emoji,0,0);ctx.restore()}
+}
+for(let i=0;i<28;i++)particles.push(new Particle());
+function animate(){ctx.clearRect(0,0,W,H);particles.forEach(p=>{p.update();p.draw()});requestAnimationFrame(animate)}
+animate();
+
+// ---- GALLERY ----
+const MAX_PHOTOS = 12;
+let photos = []; // {url, caption}
+let lbIndex = 0;
+
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const grid = document.getElementById('photo-grid');
+const emptyHint = document.getElementById('empty-hint');
+
+// Size patterns for masonry variety (repeat cycle)
+const sizePatterns = [
+  {style:''},               // normal
+  {style:''},               // normal
+  {style:'break-inside:avoid;margin-bottom:16px;'},  // normal
+  {style:''},
+  {style:''},
+  {style:''},
+];
+
+fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+dropZone.addEventListener('dragover', e => {e.preventDefault();dropZone.classList.add('dragover')});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+});
+
+function handleFiles(files){
+  const remaining = MAX_PHOTOS - photos.length;
+  const toAdd = Array.from(files).slice(0, remaining);
+  toAdd.forEach(file => {
+    if(!file.type.startsWith('image/')) return;
+    const url = URL.createObjectURL(file);
+    photos.push({url, caption:''});
+  });
+  renderGrid();
+  if(photos.length >= MAX_PHOTOS){
+    dropZone.style.opacity='0.4';
+    dropZone.style.pointerEvents='none';
+    dropZone.querySelector('.drop-text').textContent='Все 12 фото добавлены 🌸';
+  }
+}
+
+function renderGrid(){
+  grid.innerHTML='';
+  if(photos.length === 0){
+    grid.innerHTML='<div class="empty-grid" id="empty-hint">Здесь появятся ваши фотографии 🌷</div>';
+    return;
+  }
+  photos.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className='photo-card';
+    // Every 5th card gets extra height via tall image style
+    const isTall = (i % 5 === 2);
+    const isWide = (i % 7 === 0 && i !== 0);
+
+    card.innerHTML=`
+      <img src="${p.url}" alt="фото ${i+1}" style="${isTall?'aspect-ratio:3/4':isWide?'aspect-ratio:4/3':'aspect-ratio:1/1'};width:100%;display:block;object-fit:cover;" onclick="openLightbox(${i})">
+      <div class="caption-overlay"><div class="caption-text">${p.caption||''}</div></div>
+      <button class="remove-btn" onclick="removePhoto(${i})">✕</button>
+    `;
+    const input = document.createElement('input');
+    input.className='caption-input';
+    input.placeholder='Добавь подпись...';
+    input.value = p.caption||'';
+    input.addEventListener('input', e => {
+      photos[i].caption = e.target.value;
+      const overlay = card.querySelector('.caption-text');
+      if(overlay) overlay.textContent = e.target.value;
+    });
+    const wrap = document.createElement('div');
+    wrap.className='caption-input-wrap';
+    wrap.appendChild(input);
+    card.appendChild(wrap);
+    grid.appendChild(card);
+  });
+}
+
+function removePhoto(i){
+  URL.revokeObjectURL(photos[i].url);
+  photos.splice(i,1);
+  renderGrid();
+  if(photos.length < MAX_PHOTOS){
+    dropZone.style.opacity='1';
+    dropZone.style.pointerEvents='';
+    dropZone.querySelector('.drop-text').textContent='Перетащи фото сюда';
+  }
+}
+
+// ---- LIGHTBOX ----
+function openLightbox(i){
+  lbIndex=i;
+  document.getElementById('lb-img').src=photos[i].url;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open')}
+function lbNav(dir){
+  lbIndex=(lbIndex+dir+photos.length)%photos.length;
+  document.getElementById('lb-img').src=photos[lbIndex].url;
+}
+document.getElementById('lightbox').addEventListener('click',function(e){if(e.target===this)closeLightbox()});
+
+// ---- CONFETTI ----
+function launchConfetti(){
+  for(let i=0;i<60;i++){
+    setTimeout(()=>{
+      const p=new Particle();
+      p.x=W/2+(Math.random()-0.5)*200;
+      p.y=H*0.7;p.speed=2+Math.random()*4;
+      p.drift=(Math.random()-0.5)*3;p.opacity=0.9;p.size=18+Math.random()*12;
+      particles.push(p);
+      if(particles.length>80)particles.shift();
+    },i*40);
+  }
+}
+
+// ---- SCROLL REVEAL ----
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
